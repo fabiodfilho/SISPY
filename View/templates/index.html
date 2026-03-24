@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerador de Matrículas SIS</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; justify-content: center; }
+        textarea { width: 100%; height: 150px; margin-bottom: 20px; }
+        button { background: #4A0067; color: white; padding: 10px 20px; border: none; cursor: pointer; width: 100%; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2></h2>
+    <img src="/static/images/Logo01.png" alt="Ícone do SISpy" width="200">
+    <img src="/static/images/VERSAOBETA.png" alt="Ícone do SISpy" width="200">
+    <h2></h2>
+    <form action="/gerar-csv" method="post">
+        <label>IDs dos Cursos (um por linha):</label>
+        <textarea name="cursos" placeholder="Ex: CURSO_01"></textarea>
+        
+        <label>Matrículas (uma por linha):</label>
+        <textarea name="matriculas" placeholder="Ex: 2023001"></textarea>
+        
+        <button type="submit">GERAR E BAIXAR CSV</button>
+    </form>
+</body>
+</html>
