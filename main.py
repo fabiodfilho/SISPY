@@ -18,7 +18,7 @@ def gerar_csv():
     lista_bruta = request.form.get('matriculas', '').strip().splitlines()
 
     if not codigo_cursos or not lista_bruta:
-        return "Erro: Por favor, preencha todos os campos.", 400
+        return "Por favor, preencha todos os campos.", 400
 
     # Gera o CSV na memória (sem salvar arquivo no servidor)
     output = io.StringIO()
@@ -41,4 +41,4 @@ def gerar_csv():
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=True)
