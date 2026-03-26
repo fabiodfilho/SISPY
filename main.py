@@ -8,32 +8,29 @@ app = Flask(__name__,
 
 @app.route('/')
 def index():
-    # Renderiza a página inicial (o formulário)
     return render_template('index.html')
 
 @app.route('/gerar-csv', methods=['POST'])
 def gerar_csv():
-    # Pega os dados enviados pelo formulário HTML
-    codigo_cursos = request.form.get('cursos', '').strip().splitlines()
-    lista_bruta = request.form.get('matriculas', '').strip().splitlines()
+    lista_cursos_bruta = request.form.getlist('cursos[]')
+    lista_matriculas_bruta = request.form.getlist('matriculas[]')
 
-    if not codigo_cursos or not lista_bruta:
-        return "Por favor, preencha todos os campos.", 400
+    if not lista_cursos_bruta or not lista_matriculas_bruta:
+        return "Dados insuficientes.", 400
 
-    # Gera o CSV na memória (sem salvar arquivo no servidor)
     output = io.StringIO()
     escritor = csv.writer(output)
     escritor.writerow(['course_id', 'user_id', 'role', 'status'])
 
-    for matricula in lista_bruta:
-        m_limpa = matricula.strip()
-        if m_limpa:
-            for curso in codigo_cursos:
-                c_limpo = curso.strip()
-                if c_limpo:
-                    escritor.writerow([c_limpo, m_limpa, "student", "active"])
+    for bloco_curso, bloco_matricula in zip(lista_cursos_bruta, lista_matriculas_bruta):
+        
+        ids_cursos = [c.strip() for c in bloco_curso.split('\n') if c.strip()]
+        matriculas = [m.strip() for m in bloco_matricula.split('\n') if m.strip()]
 
-    # Faz o navegador baixar o arquivo automaticamente
+        for m in matriculas:
+            for c in ids_cursos:
+                escritor.writerow([c, m, "student", "active"])
+
     res = Response(output.getvalue(), mimetype="text/csv")
     res.headers["Content-Disposition"] = "attachment; filename=matriculas_sis.csv"
     return res
